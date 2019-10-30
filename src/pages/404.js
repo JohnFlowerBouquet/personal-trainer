@@ -5,7 +5,7 @@ import Section from '../components/Section';
 
 const NotFoundPage = () => (
   <Layout>
-    <Section.Container id="404" Background={Background}>
+    <Section.Container id="404">
       <Box width={[320, 400, 600]} m="auto">
         <Heading color="primaryDark" fontSize={['9rem', '13rem', '16rem']}>
           <p>404</p>

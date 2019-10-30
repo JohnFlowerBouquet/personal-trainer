@@ -1,74 +1,92 @@
-import React, { Fragment } from 'react';
-import { Box, Image, Flex } from 'rebass';
-import { StaticQuery, graphql } from 'gatsby';
+import React from 'react';
 import styled from 'styled-components';
-import ReactMarkdown from 'react-markdown';
-import Fade from 'react-reveal/Fade';
-import Section from '../components/Section';
-import markdownRenderer from '../components/MarkdownRenderer';
+import { Box, Flex, Text } from 'rebass';
+import { StaticQuery, graphql } from 'gatsby';
 
-const ProfilePicture = styled(Image)`
-  border-radius: 50%;
-  transition: all 0.25s ease-out;
-  &:hover {
-    border-radius: 20%;
+import Section from '../components/Section';
+
+const StyledTextBox = styled(Box)`
+  font-size: 20px;
+  padding: 10px;
+  line-height: 2rem;
+  word-spacing: 2px;
+  min-width: 300px;
+  max-width: 450px;
+  width: 100%;
+  color: white;
+  border-radius: 70px;
+  p {
+    text-align: center;
+  }
+  ol {
+    list-style: none;
   }
 `;
 
+const StyledFlexContainer = styled.div`
+  background: ${(props) => props.theme.colors.primaryGradient};
+  width: 100vw;
+  position: relative;
+  left: -200px;
+`
+
 const About = () => (
-  <Section.Container id="about">
-    <StaticQuery
-      query={graphql`
-        query AboutMeQuery {
-          contentfulAbout {
-            profile {
-              title
-              image: resize(width: 450, quality: 100) {
-                src
-              }
+  <StaticQuery
+    query={graphql`
+      query AboutgQuery { 
+        contentfulSiteSection1{
+          title,
+          aboutMe,
+          endText,
+          textFieldsBackgrounds {
+            fluid(maxWidth: 720) {
+              src
             }
-            aboutMe {
-              childMarkdownRemark {
-                rawMarkdownBody
-              }
+          },
+          table {
+            column1 {
+              title,
+              rows
+            }
+            column2 {
+              title,
+              rows
             }
           }
         }
-      `}
-      render={data => {
-        const { profile, aboutMe } = data.contentfulAbout;
-        return (
-          <Fragment>
-            <Section.Header name="About me" />
-            <Flex justifyContent="center" alignItems="center" flexWrap="wrap">
-              <Box width={[1, 1, 4 / 6]} px={[1, 2, 4]}>
-                <Fade bottom>
-                  <ReactMarkdown
-                    source={aboutMe.childMarkdownRemark.rawMarkdownBody}
-                    renderers={markdownRenderer}
-                  />
-                </Fade>
-              </Box>
-
-              <Box
-                width={[1, 1, 2 / 6]}
-                style={{ maxWidth: '300px', margin: 'auto' }}
-              >
-                <Fade right>
-                  <ProfilePicture
-                    src={profile.image.src}
-                    alt={profile.title}
-                    mt={[4, 4, 0]}
-                    ml={[0, 0, 1]}
-                  />
-                </Fade>
-              </Box>
+      }
+    `}
+    render={data => {
+      const { title, aboutMe, endText, textFieldsBackgrounds, table } = data.contentfulSiteSection1;
+      const columns = [table.column1, table.column2];
+      return (
+        <Section.Container id="about">
+          <Section.Header name={title} />
+          <Text fontSize={[3, 4, 4]}>
+            {aboutMe}
+          </Text>
+          <StyledFlexContainer>
+            <Flex justifyContent="space-evenly" flexWrap="wrap">
+              {columns.map((column, index) => (
+                <StyledTextBox boxIndex={index} boxBackgroundSrc={textFieldsBackgrounds[index].fluid.src}>
+                  <p>{column.title}</p>
+                  <ol>
+                    {column.rows.map(row => (
+                      <li>{row}</li>
+                    ))}
+                  </ol>
+                </StyledTextBox>
+              ))}
             </Flex>
-          </Fragment>
-        );
-      }}
-    />
-  </Section.Container>
+          </StyledFlexContainer>
+          <Text fontSize={[3, 4, 4]}>
+            {endText}
+          </Text>
+        </Section.Container>
+      )
+    }
+    }
+  />
 );
 
 export default About;

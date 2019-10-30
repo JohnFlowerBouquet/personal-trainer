@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { StaticQuery, graphql } from 'gatsby';
 import Headroom from 'react-headroom';
 import { Flex, Heading } from 'rebass';
 import styled from 'styled-components';
@@ -11,8 +12,9 @@ const capitalize = s => s && s[0].toUpperCase() + s.slice(1);
 const HeaderContainer = styled(Headroom)`
   z-index: 9;
   .headroom--pinned {
-    background: ${props => props.theme.colors.primary};
-
+    background: url(${(props) => props.backgroundSrc});
+    background-repeat: no-repeat;
+    background-size: cover;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px;
   }
   position: absolute;
@@ -25,63 +27,83 @@ const formatLinks = allLinks =>
       const isHome = key === 'home';
       return isHome
         ? {
-            ...acc,
-            home: value,
-          }
+          ...acc,
+          home: value,
+        }
         : {
-            ...acc,
-            links: [...acc.links, { name: capitalize(key), value }],
-          };
+          ...acc,
+          links: [...acc.links, { name: capitalize(key), value }],
+        };
     },
     { links: [], home: null },
   );
 
 const Header = () => (
-  <HeaderContainer>
-    <Fade top>
-      <Flex
-        flexWrap="wrap"
-        justifyContent="space-between"
-        alignItems="center"
-        p={3}
-      >
-        <SectionLinks>
-          {({ allLinks }) => {
-            const { home, links } = formatLinks(allLinks);
+  <StaticQuery
+    query={graphql`
+      query SiteNavigationQuery {
+        contentfulSiteHeader {
+          navigationItems,
+          navigationTitle,
+          navigationBackground {
+            fluid(maxWidth: 1920) {
+              src
+            }
+          }          
+        }
+      }
+    `}
+    render={data => {
+      const { navigationItems, navigationTitle, navigationBackground } = data.contentfulSiteHeader;
+      return (
+        <HeaderContainer backgroundSrc={navigationBackground.fluid.src}>
+          <Fade top>
+            <Flex
+              flexWrap="wrap"
+              justifyContent="space-between"
+              alignItems="center"
+              p={3}
+            >
+              <SectionLinks>
+                {({ allLinks }) => {
+                  const { home, links } = formatLinks(allLinks);
 
-            const homeLink = home && (
-              <RouteLink key={home.name} onClick={home.onClick}>
-                <Heading
-                  textAlign="center"
-                  as="h3"
-                  color="white"
-                  fontSize={[3, 4, 5]}
-                >
-                  {`Trener Personalny`}
-                </Heading>
-              </RouteLink>
-            );
-            const navLinks = links.map(({ name, value }) => (
-              <RouteLink
-                key={name}
-                onClick={value.onClick}
-                selected={value.selected}
-              >
-                {name}
-              </RouteLink>
-            ));
+                  const homeLink = home && (
+                    <RouteLink key={home.name} onClick={home.onClick}>
+                      <Heading
+                        textAlign="center"
+                        as="h3"
+                        color="white"
+                        fontSize={[3, 4, 5]}
+                      >
+                        {navigationTitle}
+                      </Heading>
+                    </RouteLink>
+                  );
+                  const navLinks = links.map(({ name, value }, index) => (
+                    <RouteLink
+                      key={name}
+                      onClick={value.onClick}
+                      selected={value.selected}
+                    >
+                      {navigationItems[index]}
+                    </RouteLink>
+                  ));
 
-            return (
-              <Fragment>
-                {homeLink}
-                <Flex mr={[0, 3, 5]}>{navLinks}</Flex>
-              </Fragment>
-            );
-          }}
-        </SectionLinks>
-      </Flex>
-    </Fade>
-  </HeaderContainer>
+                  return (
+                    <Fragment>
+                      {homeLink}
+                      <Flex mr={[0, 3, 5]}>{navLinks}</Flex>
+                    </Fragment>
+                  );
+                }}
+              </SectionLinks>
+            </Flex>
+          </Fade>
+        </HeaderContainer>
+      )
+    }}
+  />
 );
 
 export default Header;

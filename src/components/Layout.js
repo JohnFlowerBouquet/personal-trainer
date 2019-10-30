@@ -6,6 +6,8 @@ import 'react-tippy/dist/tippy.css';
 import config from 'react-reveal/globals';
 import colors from '../../colors';
 import Helmet from './Helmet';
+import ModalContext from './Modal/modal-context';
+
 
 const GlobalStyle = createGlobalStyle`
 *,
@@ -26,20 +28,45 @@ body {
 
 config({ ssrFadeout: true });
 
-const Layout = ({ children }) => (
-  <Fragment>
-    <GlobalStyle />
-    <ThemeProvider theme={{ colors }}>
-      <ScrollingProvider>
-        <Helmet />
-        {children}
-      </ScrollingProvider>
-    </ThemeProvider>
-  </Fragment>
-);
+export default class Layout extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.onOpenModal = () => {
+      this.setState({ open: true });
+    };
+    this.onCloseModal = () => {
+      this.setState({ open: false });
+    };
+
+    // State also contains the updater function so it will
+    // be passed down into the context provider
+    this.state = {
+      open: false,
+      onOpenModal: this.onOpenModal,
+      onCloseModal: this.onCloseModal
+    };
+  }
+
+  render() {
+    const { children } = this.props;
+
+    return (
+      <Fragment>
+        <GlobalStyle />
+        <ThemeProvider theme={{ colors }}>
+          <ModalContext.Provider value={this.state}>
+            <ScrollingProvider>
+              <Helmet />
+              {children}
+            </ScrollingProvider>
+          </ModalContext.Provider>
+        </ThemeProvider>
+      </Fragment>
+    );
+  }
+}
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-export default Layout;
