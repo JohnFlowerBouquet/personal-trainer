@@ -21,7 +21,7 @@ export const Card = styled(CardRebass).attrs({
   boxShadow: 0,
   borderRadius: 8,
 })`
-height: 200px;
+  text-align: left;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   transition: all 0.25s;
   cursor: ${props => (props.onClick ? 'pointer' : 'default')};
@@ -29,6 +29,10 @@ height: 200px;
   &:hover {
     top: -10px;
     box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  ${props => props.theme.mediaQueries.medium} {
+    height: 300px;
   }
 `;
 

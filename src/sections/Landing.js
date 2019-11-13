@@ -5,31 +5,25 @@ import TextLoop from 'react-text-loop';
 import styled from 'styled-components';
 import { SectionWithBackground, SectionContainer } from '../components/Section';
 import GetStarted from '../components/GetStarted';
-import ModalTogglerButton from '../components/Modal/modal-button'
 
 const PhotoContainer = styled.div`
   width: 50%;
   order: 1;
-  @media (min-width: 450px) {
+  margin-top: 30px;
+  ${props => props.theme.mediaQueries.medium} {
     order: 2;
     width: 25%;
+    margin-top: 0px;
   }
 `;
 
 const HeadingContainer = styled.div`
-  width: 50%;
   text-align: center;
   order: 2;
-  @media (min-width: 450px) {
+  width: 100%;
+  ${props => props.theme.mediaQueries.medium} {
     order: 1;
-  }
-  @media screen and (max-width: 40em) {
-    
-    z-index: 1;
-    width: 100%;
-    form {
-      text-align: left;
-    }
+    width: 50%;
   }
 `;
 
@@ -38,36 +32,49 @@ const LandingPage = () => (
     query={graphql`
       query SiteLandingQuery {
         contentfulSiteHeader {
-          headerTitle,
-          headerTexts,
+          headerTitle
+          headerTexts
           headerImage {
             fluid(quality: 100) {
-                  src
-                }
-          },
+              src
+            }
+          }
           headerBackground {
             fluid(maxWidth: 1920) {
-                  src
-                }
+              src
+            }
           }
         }
       }
     `}
     render={data => {
-      const { headerTitle, headerTexts, headerBackground, headerImage } = data.contentfulSiteHeader;
+      const {
+        headerTitle,
+        headerTexts,
+        headerBackground,
+        headerImage,
+      } = data.contentfulSiteHeader;
       return (
-        <SectionWithBackground id="home" backgroundSrc={headerBackground.fluid.src}>
+        <SectionWithBackground
+          id="home"
+          backgroundsrc={headerBackground.fluid.src}
+        >
           <SectionContainer>
             <Flex alignItems="center" flexWrap="wrap" justifyContent="center">
               <HeadingContainer>
-                <Heading as="h1" color="white" fontSize={[5, 6, 8]} mb={[3, 4, 5]}>
+                <Heading
+                  as="h1"
+                  color="white"
+                  fontSize={[5, 6, 8]}
+                  mb={[2, 4, 5]}
+                >
                   <Text>{`${headerTitle}`}</Text>
                 </Heading>
 
                 <Heading as="h2" color="white" fontSize={[4, 5, 6]} mb={[3, 5]}>
                   <TextLoop>
                     {headerTexts.map(text => (
-                      <Text width={[300, 500]} key={text}>
+                      <Text width={[300, 300, 500]} key={text}>
                         {text}
                       </Text>
                     ))}

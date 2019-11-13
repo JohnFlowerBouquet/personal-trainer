@@ -65,6 +65,9 @@ typings/
 public/
 .gatsby-context.js
 netlify.toml
+assets/
+.vscode
+
 
 # mac FS
 .DS_Store

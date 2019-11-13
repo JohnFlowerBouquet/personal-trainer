@@ -12,7 +12,7 @@ const capitalize = s => s && s[0].toUpperCase() + s.slice(1);
 const HeaderContainer = styled(Headroom)`
   z-index: 9;
   .headroom--pinned {
-    background: url(${(props) => props.backgroundSrc});
+    background: url(${props => props.backgroundsrc});
     background-repeat: no-repeat;
     background-size: cover;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px;
@@ -27,13 +27,13 @@ const formatLinks = allLinks =>
       const isHome = key === 'home';
       return isHome
         ? {
-          ...acc,
-          home: value,
-        }
+            ...acc,
+            home: value,
+          }
         : {
-          ...acc,
-          links: [...acc.links, { name: capitalize(key), value }],
-        };
+            ...acc,
+            links: [...acc.links, { name: capitalize(key), value }],
+          };
     },
     { links: [], home: null },
   );
@@ -43,20 +43,24 @@ const Header = () => (
     query={graphql`
       query SiteNavigationQuery {
         contentfulSiteHeader {
-          navigationItems,
-          navigationTitle,
+          navigationItems
+          navigationTitle
           navigationBackground {
             fluid(maxWidth: 1920) {
               src
             }
-          }          
+          }
         }
       }
     `}
     render={data => {
-      const { navigationItems, navigationTitle, navigationBackground } = data.contentfulSiteHeader;
+      const {
+        navigationItems,
+        navigationTitle,
+        navigationBackground,
+      } = data.contentfulSiteHeader;
       return (
-        <HeaderContainer backgroundSrc={navigationBackground.fluid.src}>
+        <HeaderContainer backgroundsrc={navigationBackground.fluid.src}>
           <Fade top>
             <Flex
               flexWrap="wrap"
@@ -86,7 +90,7 @@ const Header = () => (
                       onClick={value.onClick}
                       selected={value.selected}
                     >
-                      {navigationItems[index]}
+                      {navigationItems[index === 2 ? 3 : index]}
                     </RouteLink>
                   ));
 
@@ -101,7 +105,7 @@ const Header = () => (
             </Flex>
           </Fade>
         </HeaderContainer>
-      )
+      );
     }}
   />
 );

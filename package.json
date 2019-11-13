@@ -11,9 +11,10 @@
     "setup": "node ./bin/setup.js",
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
-  "author": "Ema Suriano",
+  "author": "",
   "license": "MIT",
   "dependencies": {
+    "@rebass/forms": "^4.0.6",
     "bluebird": "^3.5.4",
     "clean-dir": "^1.0.3",
     "contentful": "^7.0.3",
@@ -33,6 +34,7 @@
     "gatsby-transformer-remark": "^2.2.4",
     "gatsby-transformer-sharp": "^2.1.18",
     "inquirer": "^6.2.0",
+    "prettier": "^1.19.1",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

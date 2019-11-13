@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import { ScrollingProvider } from 'react-scroll-section';
 import 'react-tippy/dist/tippy.css';
 import config from 'react-reveal/globals';
-import colors from '../../colors';
+import theme from '../../theme';
 import Helmet from './Helmet';
 import ModalContext from './Modal/modal-context';
-
 
 const GlobalStyle = createGlobalStyle`
 *,
@@ -39,23 +38,22 @@ export default class Layout extends React.Component {
       this.setState({ open: false });
     };
 
-    // State also contains the updater function so it will
-    // be passed down into the context provider
     this.state = {
       open: false,
       onOpenModal: this.onOpenModal,
-      onCloseModal: this.onCloseModal
+      onCloseModal: this.onCloseModal,
     };
   }
 
   render() {
     const { children } = this.props;
+    const { open, onOpenModal, onCloseModal } = this.state;
 
     return (
       <Fragment>
         <GlobalStyle />
-        <ThemeProvider theme={{ colors }}>
-          <ModalContext.Provider value={this.state}>
+        <ThemeProvider theme={{ ...theme }}>
+          <ModalContext.Provider value={{ open, onOpenModal, onCloseModal }}>
             <ScrollingProvider>
               <Helmet />
               {children}

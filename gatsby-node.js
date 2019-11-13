@@ -22,12 +22,13 @@ exports.createPages = ({ graphql, actions }) => {
         `,
       ).then(result => {
         if (result.errors) {
+          // eslint-disable-next-line no-console
           console.log(result.errors);
           reject(result.errors);
         }
 
         const posts = result.data.allContentfulBlogPost.edges;
-        posts.forEach((post, index) => {
+        posts.forEach(post => {
           createPage({
             path: `/blog/${post.node.slug}/`,
             component: blogPost,

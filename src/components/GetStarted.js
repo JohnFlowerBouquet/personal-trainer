@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Text, Flex } from 'rebass';
+import PropTypes from 'prop-types';
+import { Button, Text } from 'rebass';
 import ModalContext from './Modal/modal-context';
-
 
 const GetStarted = () => (
   <ModalContext.Consumer>
-    {(props) => (
+    {props => (
       <Button
         onClick={() => props.onOpenModal()}
         bg="secondary"
@@ -20,5 +20,9 @@ const GetStarted = () => (
     )}
   </ModalContext.Consumer>
 );
+
+GetStarted.propTypes = {
+  onOpenModal: PropTypes.func,
+};
 
 export default GetStarted;

@@ -1,24 +1,21 @@
-import React from 'react';
+/* eslint-disable react/jsx-one-expression-per-line */
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Box } from 'rebass';
 import PropTypes from 'prop-types';
+import { DummySection } from './Section';
 
 const FooterContainer = styled.footer`
   padding: 1em;
   background: white;
   color: ${props => props.theme.colors.primary};
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   height: 100vh;
   z-index: -101;
   bottom: 0;
   width: 100%;
   @media (min-width: 450px) {
-    height: 600px;
+    height: 500px;
   }
 `;
 
@@ -32,23 +29,21 @@ const RenponsiveLogo = styled.img`
   }
 `;
 
-const Map = styled.div`
-  .gmap_canvas {
-    overflow:hidden;
-    background:none!important;
-    width: 100vw;
-    height: auto;
-    max-height: 400px;
-    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
-    border-radius: 0px;
-    margin-bottom: 3rem;
+const Map = styled.iframe`
+  overflow: hidden;
+  background: none !important;
+  width: 100vw;
+  height: calc(100vh / 2);
+  min-height: 300px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 0px;
+  margin-bottom: 3rem;
 
-    @media (min-width: 450px) {
-      height:450px;
-      width:450px;
-      border-radius: 10px;
-      margin-bottom: 0;
-    }
+  ${props => props.theme.mediaQueries.medium} {
+    height: 400px;
+    width: 400px;
+    border-radius: 10px;
+    margin-bottom: 0;
   }
 `;
 
@@ -67,44 +62,53 @@ Logo.propTypes = {
 };
 
 const Footer = () => (
-  <FooterContainer>
-    <Flex justifyContent="space-evenly" flexWrap="wrap" style={{ width: '80%' }}>
-      <Map>
-        <div className="gmap_canvas">
-          <iframe title="Google Map" width="500" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=hasta%20la%20vista&t=&z=13&ie=UTF8&iwloc=&output=embed" frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0" />
-        </div>
-      </Map>
-      <Flex justifyContent="center" alignItems="center" flexDirection="column">
-        <Text
-          pb={1}
-          style={{
-            textTransform: 'uppercase'
-          }}
+  <Fragment>
+    <DummySection id="contact" />
+    <FooterContainer>
+      <Flex justifyContent="space-evenly" flexWrap="wrap">
+        <Map
+          title="Google Map"
+          src="https://maps.google.com/maps?q=hasta%20la%20vista&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          frameBorder="0"
+          scrolling="no"
+          marginHeight="0"
+          marginWidth="0"
+        />
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
         >
-          <span>Trener Personalny</span>
-        </Text>
-        <Text mt={2} fontSize={4}>
-          <span>Małgorzata Małaczek</span>
-        </Text>
-        <Text
-          pb={1}
-          mb={2}
-        >
-          <span>malaczek.malgorzata@gmail.com</span>
-        </Text>
-        <Text
-          pb={1}
-          style={{
-            textTransform: 'uppercase',
-            textAlign: 'center'
-          }}
-        >
-          <p>Treningi prowadzę na obiekcie</p>
-          <span>Hasta La Vista</span>
-        </Text>
+          <Text
+            fontSize={[3, 5, 5]}
+            pb={1}
+            style={{
+              textTransform: 'uppercase',
+            }}
+          >
+            Trener Personalny
+          </Text>
+          <Text fontSize={[4, 6, 6]} mt={2}>
+            Małgorzata Małaczek
+          </Text>
+          <Text fontSize={[2, 4, 4]} pb={1} mb={4}>
+            malaczek.malgorzata@gmail.com
+          </Text>
+          <Text
+            fontSize={[2, 3, 3]}
+            pb={1}
+            style={{
+              textAlign: 'center',
+              lineHeight: '1em',
+            }}
+          >
+            Treningi prowadzę na obiekcie
+          </Text>
+          <Text fontSize={[2, 3, 3]}>Hasta La Vista</Text>
+        </Flex>
       </Flex>
-    </Flex>
-  </FooterContainer>
+    </FooterContainer>
+  </Fragment>
 );
 
 export default Footer;
